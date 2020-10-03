@@ -5,6 +5,9 @@ import com.opencsv.CSVReader;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -20,20 +23,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] srgs) throws ParserConfigurationException, IOException, SAXException {
+    public static void main(String[] srgs){
         String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
         String fileNameCSV = "data.csv";
         String fileNameXML = "data.xml";
         String fileNameCSVJson = "dataCSV.json";
         String fileNameXMLJson = "dataXML.json";
-        List<Employee> listCSV = parseCSV(columnMapping, fileNameCSV);
-        listToJson(listCSV, fileNameCSVJson);
-//////////////////////////////////////////////////////////////////////
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(fileNameXML);
-        List<Employee> listXML = parseXML(doc, fileNameXML);//получение списка класса Employee из файла XML
-        listToJson(listXML, fileNameXMLJson);//запись файла Json
+//////////////////// CSV - JSON /////////////////////////////////////
+//        List<Employee> listCSV = parseCSV(columnMapping, fileNameCSV);
+//        listToJson(listCSV, fileNameCSVJson);
+/////////////////// XML - JSON //////////////////////////////////////
+//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//        DocumentBuilder builder = factory.newDocumentBuilder();
+//        Document doc = builder.parse(fileNameXML);
+//        List<Employee> listXML = parseXML(doc, fileNameXML);//получение списка класса Employee из файла XML
+//        listToJson(listXML, fileNameXMLJson);//запись файла Json
+////////////////// JSON - JAVA //////////////////////////////////////
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(fileNameXMLJson));
+            JSONObject jsonObject = (JSONObject) obj;
+            System.out.println(jsonObject);
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+//        GsonBuilder build = new GsonBuilder();
+//        Gson gson = build.create();
+//        Employee employee = gson.fromJson(jsonText, Employee.class);
     }
 
     public static List<Employee> parseXML(Document doc, String fileNameXML) {
