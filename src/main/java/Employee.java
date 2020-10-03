@@ -28,10 +28,6 @@ public class Employee {
         this.id = id;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -40,24 +36,14 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public String setLastName() {
-        return lastName;
-    }
-
     public void setCountry(String country) {
         this.country = country;
     }
 
-    public String setCountry() {
-        return country;
-    }
 
-    public void setAge(int age){
+    public void setAge(int age) {
         this.age = age;
     }
 
-    public int setAge(){
-        return age;
-    }
 
 }
