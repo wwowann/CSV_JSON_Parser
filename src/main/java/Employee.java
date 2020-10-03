@@ -27,17 +27,15 @@ public class Employee {
     public void setId(long id) {
         this.id = id;
     }
+
     public long getId() {
         return id;
     }
 
-    public void setfirtName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public String setfirtName() {
-        return firstName;
-    }
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
