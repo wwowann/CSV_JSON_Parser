@@ -32,7 +32,8 @@ public class Main {
         String fileNameXMLJson = "dataXML.json";
 //////////////////// CSV - JSON /////////////////////////////////////
         System.out.println("Задача №1. Сериализация из CSV в JSON");
-        List<Employee> listCSV = parseCSV(columnMapping, fileNameCSV);
+        List<Employee> listCSV = null;
+        listCSV = parseCSV(columnMapping, fileNameCSV, listCSV);
         listToJson(listCSV, fileNameCSVJson);
 /////////////////// XML - JSON //////////////////////////////////////
         System.out.println("Задача №2. Сереализация из XML в JSON");
@@ -109,8 +110,8 @@ public class Main {
         }
     }
 
-    public static List<Employee> parseCSV(String[] columnMapping, String fileName) {
-        List<Employee> list = null;
+    public static List<Employee> parseCSV(String[] columnMapping, String fileName,
+                                          List<Employee> list) {
         try (CSVReader csvReader = new CSVReader(new FileReader(fileName));) {
             ColumnPositionMappingStrategy<Employee> strategy =
                     new ColumnPositionMappingStrategy<>();
