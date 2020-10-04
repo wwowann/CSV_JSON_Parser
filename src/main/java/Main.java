@@ -1,14 +1,12 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
@@ -26,69 +24,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
         String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
         String fileNameCSV = "data.csv";
         String fileNameXML = "data.xml";
         String fileNameCSVJson = "dataCSV.json";
         String fileNameXMLJson = "dataXML.json";
 //////////////////// CSV - JSON /////////////////////////////////////
-//        List<Employee> listCSV = parseCSV(columnMapping, fileNameCSV);
-//        listToJson(listCSV, fileNameCSVJson);
+        System.out.println("Задача №1. Сериализация из CSV в JSON");
+        List<Employee> listCSV = parseCSV(columnMapping, fileNameCSV);
+        listToJson(listCSV, fileNameCSVJson);
 /////////////////// XML - JSON //////////////////////////////////////
-//        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//        DocumentBuilder builder = factory.newDocumentBuilder();
-//        Document doc = builder.parse(fileNameXML);
-//        List<Employee> listXML = parseXML(doc, fileNameXML);//получение списка класса Employee из файла XML
-//        listToJson(listXML, fileNameXMLJson);//запись файла Json
-////////////////// JSON - JAVA //////////////////////////////////////
-        String jsonString = readString(fileNameXMLJson);
-        System.out.println(jsonString);
+        System.out.println("Задача №2. Сереализация из XML в JSON");
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse(fileNameXML);
+        List<Employee> listXML = parseXML(doc, fileNameXML);//получение списка класса Employee из файла XML
+        listToJson(listXML, fileNameXMLJson);//запись файла Json
+////////////////// JSON - JAVAObject ///////////////////////////////
+        System.out.println("Задача №3. Десереализация из JSON в Java-Object");
         JSONParser parser = new JSONParser();
+        List <Employee> employeeList = new ArrayList<>();
         try {
             Object obj = parser.parse(new FileReader(fileNameXMLJson));
-            JSONObject jsonObject = (JSONObject) obj;
-            System.out.println(jsonObject);
+            JSONArray jsonArray = (JSONArray) obj;
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            Gson gson = gsonBuilder.create();
+
+            for (Object object : jsonArray) {
+                String jsonText = object.toString();
+                Employee employee = gson.fromJson(jsonText, Employee.class);
+                employeeList.add(employee);
+                System.out.println(employee);
+            }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
-    }
-
-    public static String readString(String fileNameXMLJson) {
-        FileInputStream fileInputStream = null;
-        StringBuffer stringBuffer = new StringBuffer("");
-        try {
-            fileInputStream = new FileInputStream(fileNameXMLJson);
-            int i;
-            while ((i = fileInputStream.read()) != -1) {
-                stringBuffer.append((char) i);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return stringBuffer.toString();
     }
 
     public static List<Employee> parseXML(Document doc, String fileNameXML) {
-        System.out.println("Парсинг из XML в JSON");
         List<Employee> list = new ArrayList<>();
         NodeList nodeList = doc.getDocumentElement().getChildNodes();
-
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             Employee employee = new Employee();
             if (Node.ELEMENT_NODE == node.getNodeType()) {
                 Element element = (Element) node;
-                System.out.println(Long.parseLong(getTagValue("id", element)));
                 employee.setId(Long.parseLong(getTagValue("id", element)));
                 employee.setFirstName(getTagValue("firstName", element));
                 employee.setLastName(getTagValue("lastName", element));
@@ -126,7 +107,6 @@ public class Main {
     }
 
     public static List<Employee> parseCSV(String[] columnMapping, String fileName) {
-        System.out.println("Парсинг из CSV в JSON");
         List<Employee> list = null;
         try (CSVReader csvReader = new CSVReader(new FileReader(fileName));) {
             ColumnPositionMappingStrategy<Employee> strategy =
@@ -144,6 +124,5 @@ public class Main {
         }
         return list;
     }
-
 }
 
