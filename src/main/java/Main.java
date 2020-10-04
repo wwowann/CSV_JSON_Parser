@@ -44,8 +44,6 @@ public class Main {
 ////////////////// JSON - JAVA //////////////////////////////////////
         String jsonString = readString(fileNameXMLJson);
         System.out.println(jsonString);
-        JSONArray jsonArray = new JSONArray(jsonString);
-        
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader(fileNameXMLJson));
