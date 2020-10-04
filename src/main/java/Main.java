@@ -39,26 +39,29 @@ public class Main {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(fileNameXML);
-        List<Employee> listXML = parseXML(doc, fileNameXML);//получение списка класса Employee из файла XML
-        listToJson(listXML, fileNameXMLJson);//запись файла Json
+        List<Employee> listXML = parseXML(doc, fileNameXML);
+        listToJson(listXML, fileNameXMLJson);
 ////////////////// JSON - JAVAObject ///////////////////////////////
         System.out.println("Задача №3. Десереализация из JSON в Java-Object");
         JSONParser parser = new JSONParser();
-        List <Employee> employeeList = new ArrayList<>();
+        List<Employee> employeeList = new ArrayList<>();
         try {
             Object obj = parser.parse(new FileReader(fileNameXMLJson));
             JSONArray jsonArray = (JSONArray) obj;
             GsonBuilder gsonBuilder = new GsonBuilder();
             Gson gson = gsonBuilder.create();
-
-            for (Object object : jsonArray) {
-                String jsonText = object.toString();
-                Employee employee = gson.fromJson(jsonText, Employee.class);
-                employeeList.add(employee);
-                System.out.println(employee);
-            }
+            jsonToList(jsonArray, gson, employeeList);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void jsonToList(JSONArray jsonArray, Gson gson, List<Employee> employeeList) {
+        for (Object object : jsonArray) {
+            String jsonText = object.toString();
+            Employee employee = gson.fromJson(jsonText, Employee.class);
+            employeeList.add(employee);
+            System.out.println(employee);
         }
     }
 
