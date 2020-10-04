@@ -1,10 +1,13 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import com.opencsv.CSVReader;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -23,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] srgs){
+    public static void main(String[] args) {
         String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
         String fileNameCSV = "data.csv";
         String fileNameXML = "data.xml";
@@ -39,6 +42,10 @@ public class Main {
 //        List<Employee> listXML = parseXML(doc, fileNameXML);//получение списка класса Employee из файла XML
 //        listToJson(listXML, fileNameXMLJson);//запись файла Json
 ////////////////// JSON - JAVA //////////////////////////////////////
+        String jsonString = readString(fileNameXMLJson);
+        System.out.println(jsonString);
+        JSONArray jsonArray = new JSONArray(jsonString);
+        
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader(fileNameXMLJson));
@@ -48,9 +55,29 @@ public class Main {
             e.printStackTrace();
         }
 
-//        GsonBuilder build = new GsonBuilder();
-//        Gson gson = build.create();
-//        Employee employee = gson.fromJson(jsonText, Employee.class);
+    }
+
+    public static String readString(String fileNameXMLJson) {
+        FileInputStream fileInputStream = null;
+        StringBuffer stringBuffer = new StringBuffer("");
+        try {
+            fileInputStream = new FileInputStream(fileNameXMLJson);
+            int i;
+            while ((i = fileInputStream.read()) != -1) {
+                stringBuffer.append((char) i);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return stringBuffer.toString();
     }
 
     public static List<Employee> parseXML(Document doc, String fileNameXML) {
