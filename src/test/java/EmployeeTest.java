@@ -4,9 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -32,17 +30,19 @@ public class EmployeeTest {
             assertEquals(i, expected);
         }
     }
+
     @Test
-       public void SubstringMatcher() {
+    public void SubstringMatcher() {
         List<Employee> list = new ArrayList<>();
         Employee emp = new Employee();
         for (Employee e : list) {
-           MatcherAssert.assertThat("n", CoreMatchers.containsString(e.firstName));
+            MatcherAssert.assertThat("T", CoreMatchers.containsString(e.getFirstName()));
 
         }
     }
+
     @Test
-    public void getFirstNameMatcher(){
+    public void getFirstNameMatcher() {
         List<Employee> list = new ArrayList<>();
         Employee emp = new Employee();
         for (Employee e : list) {
@@ -52,14 +52,12 @@ public class EmployeeTest {
         }
     }
 
-   @Test
-   public void idEqualsIndexOf() {
-       List<Employee> list = new ArrayList<>();
-       Employee emp = new Employee();
-       Assert.assertEquals(list.size(), emp.id);
-   }
-
-
+    @Test
+    public void idEqualsIndexOf() {
+        List<Employee> list = new ArrayList<>();
+        Employee emp = new Employee();
+        Assert.assertEquals(list.size(), emp.id);
+    }
 }
 
 
