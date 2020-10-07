@@ -1,63 +1,51 @@
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-
 public class EmployeeTest {
+    List<Employee> list = new ArrayList<>();
 
-    @Before
+    @BeforeEach
     public void addEmployee() {
-        List<Employee> list = new ArrayList<>();
         Employee emp = new Employee(1, "Inav", "Petrov", "RU", 25);
         list.add(emp);
-        Employee emp1 = new Employee(2, "John", "Smith", "USA", 23);
-        list.add(emp1);
+        emp = new Employee(2, "John", "Smith", "USA", 23);
+        list.add(emp);
     }
 
     @Test
     public void getFirstName() {
-        List<Employee> list = new ArrayList<>();
-        Employee emp = new Employee();
-        for (Employee e : list) {
-            String i = emp.getFirstName();
-            String expected = "Inav";
-            assertEquals(i, expected);
-        }
+        Assert.assertEquals("John", list.get(1).getFirstName());
     }
 
     @Test
-    public void SubstringMatcher() {
-        List<Employee> list = new ArrayList<>();
-        Employee emp = new Employee();
-        for (Employee e : list) {
-            MatcherAssert.assertThat("T", CoreMatchers.containsString(e.getFirstName()));
-
-        }
+    public void firstNameBeginStartSwith() {
+        MatcherAssert.assertThat(list.get(1).getFirstName(), CoreMatchers.startsWith("J"));
     }
 
     @Test
     public void getFirstNameMatcher() {
-        List<Employee> list = new ArrayList<>();
-        Employee emp = new Employee();
-        for (Employee e : list) {
-            String i = emp.getFirstName();
-            String expected = "Inav";
-            MatcherAssert.assertThat(i, CoreMatchers.equalTo(expected));
-        }
+        MatcherAssert.assertThat("Inav", CoreMatchers.equalTo(list.get(0).firstName));
+
     }
 
     @Test
-    public void idEqualsIndexOf() {
-        List<Employee> list = new ArrayList<>();
-        Employee emp = new Employee();
-        Assert.assertEquals(list.size(), emp.id);
+    public void containsStringInLastname() {
+
+        MatcherAssert.assertThat(list.get(1).lastName, CoreMatchers.containsString("i"));
     }
+
+    @Test
+    public void endSwithInLastname() {
+
+        MatcherAssert.assertThat(list.get(0).lastName, CoreMatchers.endsWith("ov"));
+    }
+
 }
 
 

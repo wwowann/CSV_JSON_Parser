@@ -40,6 +40,9 @@ public class Employee {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    public String getLastName() {
+        return this.lastName;
+    }
 
     public void setCountry(String country) {
         this.country = country;
